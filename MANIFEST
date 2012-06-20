@@ -5,4 +5,3 @@ Todo
 Changes
 Makefile.PL
 lib/Text/Levenshtein/Damerau.pm
-t/001_load.t

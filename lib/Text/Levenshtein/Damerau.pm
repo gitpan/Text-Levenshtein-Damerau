@@ -5,7 +5,7 @@ use warnings;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 use List::Util qw(min);
 
-$VERSION     = '0.02';
+$VERSION     = '0.03';
 @ISA         = qw(Exporter);
 @EXPORT      = ();
 @EXPORT_OK   = qw(&edistance);
