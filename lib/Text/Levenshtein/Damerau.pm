@@ -5,7 +5,7 @@ use warnings;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 use List::Util qw(min);
 
-$VERSION     = '0.04';
+$VERSION     = '0.05';
 @ISA         = qw(Exporter);
 @EXPORT      = ();
 @EXPORT_OK   = qw(&edistance);
@@ -108,7 +108,7 @@ Returns the true Damerau Levenshtein edit distance of strings.
 
 =head1 AUTHOR
 
-Copyright 2011 Nick Logan <F<nickl@skunkds.com>>
+Copyright 2012 Nick Logan <F<nickl@skunkds.com>>
 
 This package is free software and is provided "as is" without express
 or implied warranty.  You can redistribute it and/or modify it under 

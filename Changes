@@ -1,5 +1,9 @@
 Revision history for Perl module Text::Levenshtein::Damerau
 
+0.05 Sat Sep 20 19:32:28 2012
+    - Corrected directory structure to install with cpanm
+
+
 0.04 Sat Jun 20 14:34:43 2012
     - original version; created by ExtUtils::ModuleMaker
 
