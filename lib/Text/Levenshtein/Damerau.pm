@@ -5,11 +5,15 @@ use warnings;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 use List::Util qw(min);
 
-$VERSION     = '0.05';
+$VERSION     = '0.06';
 @ISA         = qw(Exporter);
 @EXPORT      = ();
-@EXPORT_OK   = qw(&edistance);
+@EXPORT_OK   = qw(&edistance &dld);
 %EXPORT_TAGS = ();
+
+sub dld {
+	edistance(@_);
+}
 
 sub edistance {
 	my ($source,$target) = @_;
@@ -90,16 +94,15 @@ Text::Levenshtein::Damerau - Damerau Levenshtein edit distance
 
 =head1 SYNOPSIS
 
- use Text::Levenshtein::Damerau qw(edistance);
+ use Text::Levenshtein::Damerau qw(dld);
 
- print edistance("foo","four");
- # prints "2"
- 
-
- print edistance("svee","seven");
+ print dld("foo","four");
  # prints "2"
 
- print edistance("ABC","abC");
+ print dld("svee","seven");
+ # prints "2"
+
+ print dld("ABC","abC");
  # prints "2"
 
 =head1 DESCRIPTION
@@ -108,10 +111,10 @@ Returns the true Damerau Levenshtein edit distance of strings.
 
 =head1 AUTHOR
 
-Copyright 2012 Nick Logan <F<nickl@skunkds.com>>
+ugexe <F<ug@skunkds.com>>
 
-This package is free software and is provided "as is" without express
-or implied warranty.  You can redistribute it and/or modify it under 
-the same terms as Perl itself.
+=head1 LICENSE
+
+This library is free software; you can redistribute it and/or modify it under the same terms as Perl itself.
 
 =cut

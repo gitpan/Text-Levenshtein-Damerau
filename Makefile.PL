@@ -1,14 +1,8 @@
-use ExtUtils::MakeMaker;
+use inc::Module::Install;
 
-# See lib/ExtUtils/MakeMaker.pm for details of how to influence
+name          	'Text-Levenshtein-Damerau';
+all_from      	'lib/Text/Levenshtein/Damerau.pm';
+  
+test_requires	'Test::Base'  => '0';  
 
-# the contents of the Makefile that is written.
-
-
-
-WriteMakefile(
-    NAME         => 'Text::Levenshtein::Damerau',
-    VERSION_FROM => 'lib/Text/Levenshtein/Damerau.pm', # finds \$VERSION
-    AUTHOR       => 'Nick Logan (nickl@skunkds.com)',
-    ABSTRACT     => '',
-);
+WriteAll; 

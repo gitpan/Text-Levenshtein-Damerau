@@ -1,10 +1,17 @@
 Revision history for Perl module Text::Levenshtein::Damerau
 
+0.06 Sat Oct 20 16:40:19 2012
+	- Added tests
+	- Added function dld (mirror of edistance) for clarity
+	- Modified documentation
+	- Added tests using Test::Base
+	- Switched to Module::Install   
+
 0.05 Sat Sep 20 19:32:28 2012
-    - Corrected directory structure to install with cpanm
+	- Corrected directory structure to install with cpanm
 
 
 0.04 Sat Jun 20 14:34:43 2012
-    - original version; created by ExtUtils::ModuleMaker
+	- original version; created by ExtUtils::ModuleMaker
 
 
