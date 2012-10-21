@@ -42,7 +42,7 @@ fuor
 --- expected
 1
 
-=== test double-transposition
+=== test double-substitution
 --- input
 ufor
 --- expected

@@ -2,10 +2,11 @@ package Text::Levenshtein::Damerau;
 
 use strict;
 use warnings;
+use utf8;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 use List::Util qw(min);
 
-$VERSION     = '0.06';
+$VERSION     = '0.07';
 @ISA         = qw(Exporter);
 @EXPORT      = ();
 @EXPORT_OK   = qw(&edistance &dld);
@@ -85,7 +86,6 @@ sub _null_or_empty {
 }
 
 1;
-
 __END__
 
 =head1 NAME
@@ -94,16 +94,16 @@ Text::Levenshtein::Damerau - Damerau Levenshtein edit distance
 
 =head1 SYNOPSIS
 
- use Text::Levenshtein::Damerau qw(dld);
+use Text::Levenshtein::Damerau qw(dld);
 
- print dld("foo","four");
- # prints "2"
+print dld("foo","four");
+# prints "2"
 
- print dld("svee","seven");
- # prints "2"
+print dld("svee","seven");
+# prints "2"
 
- print dld("ABC","abC");
- # prints "2"
+print dld("ABC","abC");
+# prints "2"
 
 =head1 DESCRIPTION
 

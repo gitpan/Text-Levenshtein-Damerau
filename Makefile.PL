@@ -2,7 +2,10 @@ use inc::Module::Install;
 
 name          	'Text-Levenshtein-Damerau';
 all_from      	'lib/Text/Levenshtein/Damerau.pm';
-  
-test_requires	'Test::Base'  => '0';  
+auto_manifest;
 
+requires      'List::Util';
+test_requires 'Test::Base'; 
+test_requires 'Test::More';
+ 
 WriteAll; 
