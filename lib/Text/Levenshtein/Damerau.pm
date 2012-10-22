@@ -4,9 +4,8 @@ use strict;
 use warnings;
 use utf8;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
-use List::Util qw(min);
 
-$VERSION     = '0.07';
+$VERSION     = '0.08';
 @ISA         = qw(Exporter);
 @EXPORT      = ();
 @EXPORT_OK   = qw(&edistance &dld);
@@ -30,7 +29,9 @@ sub edistance {
 	elsif( _null_or_empty($target) ) {
 		return length($source);
 	}
-
+	elsif( $source eq $target ) {
+		return 0;
+	}
 	
 
 	my $m = length($source);
@@ -85,6 +86,11 @@ sub _null_or_empty {
 	return 1;
 }
 
+sub min {
+    my ($x, @xs) = @_;
+    @xs ? do { my $m = min(@xs); ($x, $m)[$x > $m] } : $x;
+}
+
 1;
 __END__
 
@@ -94,20 +100,20 @@ Text::Levenshtein::Damerau - Damerau Levenshtein edit distance
 
 =head1 SYNOPSIS
 
-use Text::Levenshtein::Damerau qw(dld);
+  use Text::Levenshtein::Damerau qw(dld);
 
-print dld("foo","four");
-# prints "2"
+  print dld("foo","four");
+  # prints "2"
 
-print dld("svee","seven");
-# prints "2"
+  print dld("svee","seven");
+  # prints "2"
 
-print dld("ABC","abC");
-# prints "2"
+  print dld("ABC","abC");
+  # prints "2"
 
 =head1 DESCRIPTION
 
-Returns the true Damerau Levenshtein edit distance of strings.
+Returns the true Damerau Levenshtein edit distance of strings with adjacent transpositions..
 
 =head1 AUTHOR
 

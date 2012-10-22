@@ -1,5 +1,10 @@
 Revision history for Perl module Text::Levenshtein::Damerau
 
+0.08 Sun Oct 21 18:54:48 2012
+	- Documentation fix
+	- Removed List::Util in favor of local min subroutine
+	- return 0 without doing calculations if strings match
+
 0.07 Sun Oct 21 14:35:11 2012
 	- use utf8;
 	- Added more tests
@@ -17,5 +22,6 @@ Revision history for Perl module Text::Levenshtein::Damerau
 
 0.04 Sat Jun 20 14:34:43 2012
 	- original version; created by ExtUtils::ModuleMaker
+
 
 

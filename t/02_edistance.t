@@ -26,7 +26,7 @@ four
 
 === test insertion
 --- input
-fou
+for
 --- expected
 1
 
@@ -42,9 +42,9 @@ fuor
 --- expected
 1
 
-=== test double-substitution
+=== test substitution
 --- input
-ufor
+fxxr
 --- expected
 2
 
