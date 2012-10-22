@@ -7,4 +7,4 @@ auto_manifest;
 test_requires 'Test::Base'; 
 test_requires 'Test::More';
  
-WriteAll; 
+WriteAll;

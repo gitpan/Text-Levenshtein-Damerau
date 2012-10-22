@@ -1,21 +1,20 @@
 package Text::Levenshtein::Damerau;
 
-use strict;
-use warnings;
 use utf8;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
-$VERSION     = '0.08';
+$VERSION     = '0.09';
 @ISA         = qw(Exporter);
 @EXPORT      = ();
 @EXPORT_OK   = qw(&edistance &dld);
 %EXPORT_TAGS = ();
 
-sub dld {
-	edistance(@_);
+# For backwards compatability
+sub edistance {
+	dld(@_);
 }
 
-sub edistance {
+sub dld {
 	my ($source,$target) = @_;
 
 	if( _null_or_empty($source) ) {

@@ -1,5 +1,3 @@
-use strict;
-use warnings;
 use Test::Base;
 use Text::Levenshtein::Damerau qw(&dld);
 

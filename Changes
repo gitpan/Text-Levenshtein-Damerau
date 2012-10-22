@@ -1,5 +1,9 @@
 Revision history for Perl module Text::Levenshtein::Damerau
 
+0.09 Sun Oct 21 19:52:16 2012
+	- Fixed file creation time error with cpan installation
+
+
 0.08 Sun Oct 21 18:54:48 2012
 	- Documentation fix
 	- Removed List::Util in favor of local min subroutine
