@@ -3,7 +3,7 @@ package Text::Levenshtein::Damerau;
 use utf8;
 use List::Util qw/reduce min/;
 
-our $VERSION = '0.10';
+our $VERSION = '0.11';
 
 =head1 NAME
 
