@@ -1,4 +1,3 @@
-use utf8;
 use Test::Base;
 use Text::Levenshtein::Damerau;
 
@@ -9,40 +8,31 @@ filters {
     expected => [qw/chomp/],
 };
 
+
 run {
 	my $block = shift;
-	my $tld = Text::Levenshtein::Damerau->new('ⓕⓞⓤⓡ');
-	is( $tld->dld($block->input), $block->expected );
+	my $tld = Text::Levenshtein::Damerau->new($block->input);
+	my @list = ('fuor','forty','for');
+	is( $tld->dld_best_match({ list => \@list }), $block->expected );
 };
 
 __END__
 
 === test matching
 --- input
-ⓕⓞⓤⓡ
+four
 --- expected
-0
+fuor
 
 === test insertion
 --- input
-ⓕⓞⓡ
+for
 --- expected
-1
+for
 
 === test deletion
 --- input
-ⓕⓞⓤⓡⓣⓗ
+forty-seven
 --- expected
-2
+forty
 
-=== test transposition
---- input
-ⓕⓤⓞⓡ
---- expected
-1
-
-=== test substitution
---- input
-ⓕⓧⓧⓡ
---- expected
-2
