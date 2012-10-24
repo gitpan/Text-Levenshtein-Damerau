@@ -6,7 +6,7 @@ use List::Util qw/reduce min/;
 @ISA = qw(Exporter);
 @EXPORT_OK = qw(edistance);
 
-our $VERSION = '0.16';
+our $VERSION = '0.17';
 
 =head1 NAME
 
@@ -26,14 +26,14 @@ C<Text::Levenshtein::Damerau> - Damerau Levenshtein edit distance
 	print $tld->dld($targets[0]);
 	# prints 1
 
-	my %tld_hash = $tld->dld(@targets);
-	print $tld_hash{'fuor'};
+	my $tld = $tld->dld({ list => \@targets });
+	print $tld->{'fuor'};
 	# prints 1
 
-	print $tld->dld_best_match(@targets);
+	print $tld->dld_best_match({ list => \@targets });
 	# prints fuor
 
-	print $tld->dld_best_distance(@targets);
+	print $tld->dld_best_distance({ list => \@targets });
  	# prints 1
 
 =head1 DESCRIPTION
@@ -90,7 +90,7 @@ Returns: hashref with each word from the passed list as keys, and their edit dis
 
 	my @names_list = ('Neil','Jack');
 	my $tld = Text::Levenshtein::Damerau->new('Neil');
-	my $d_ref = $tld->dld( \@names_list ); # pass a list, returns a hash
+	my $d_ref = $tld->dld({ list=> \@names_list }); # pass a list, returns a hash
 	print $d_ref->{'Niel'}; #prints 1
 	print $d_ref->{'Jack'}; #prints 4
 
@@ -105,6 +105,7 @@ sub dld {
 	if( ref $args->{'list'} eq 'ARRAY' ) {
 		foreach my $target ( @{$args->{'list'}} ) {
 			my $distance = edistance($source,$target);
+
 			if( !defined($args->{max_distance}) ) {
 				$target_score->{$target} = edistance($self->{'source'},$target);
 			}
@@ -137,17 +138,19 @@ Returns: the string with the smallest edit distance between the source and the a
 Takes distance of $tld source against every item in @targets, then returns the string of the best match
 
 	my @name_spellings = ('Niel','Neell','KNiel');
-	print $tld->dld_best_match( \@name_spellings );
+	print $tld->dld_best_match({ list=> \@name_spellings });
 	# prints Niel
 
 =cut
 
 sub dld_best_match {
 	my $self = shift;
-	my $targets = shift;;
-	my $hash = $self->dld( $targets );
+	my $args = shift;
 
-	return reduce { $hash->{$a} < $hash->{$b} ? $a : $b } keys %$hash;
+	if( defined($args->{'list'}) ) {
+		my $hash_ref = $self->dld($args);
+		return reduce { $hash_ref->{$a} < $hash_ref->{$b} ? $a : $b } keys %$hash_ref;
+	}
 }
 
 =head2 $tld->dld_best_distance
@@ -159,17 +162,21 @@ Returns: the smallest edit distance between the source and the array reference o
 Takes distance of $tld source against every item in the passed array, then returns the smallest edit distance.
 
 	my @name_spellings = ('Niel','Neell','KNiel');
-	print $tld->dld_best_distance( \@name_spellings );
+	print $tld->dld_best_distance({ list => \@name_spellings });
 	# prints 1
 
 =cut
 
 sub dld_best_distance {
 	my $self = shift;
-	my @targets = @_;
+	my $args = shift;
 
-	my $best_match = $self->dld_best_match(@targets);
-	return $self->dld( $best_match );
+	if( defined($args->{'list'}) ) {
+		my $best_match = $self->dld_best_match({ list => \@targets });
+		return $self->dld( $best_match );
+	}
+
+	return undef;
 }
 
 =head1 EXPORTABLE METHODS
