@@ -1,5 +1,9 @@
 Revision history for Perl module Text::Levenshtein::Damerau
 
+0.20 Fri Oct 26 17:39:51 2012
+	- Moved edistance to ::PP sub module. Adding a ::XS distro engine to do the heavy lifting of edistance in C if available.
+	- Lots of refactoring 
+
 0.19 Thu Oct 25 00:02:39 2012
 	- Test consolidation; All tests use Test::More, removed Test::Base tests
 	- Passes use strict by checking dld if its a reference

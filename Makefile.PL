@@ -8,8 +8,10 @@ auto_manifest;
 auto_set_repository;
 auto_license;
 
-test_requires 'Test::Base'; 
+
 test_requires 'Test::More';
 requires 'List::Util';
+reccomends 'Text::Levenshtein::Damerau::XS';
+
  
-WriteAll;
+WriteAll();

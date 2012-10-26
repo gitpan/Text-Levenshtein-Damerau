@@ -4,7 +4,6 @@ author:
   - 'ugexe <F<ug@skunkds.com>>'
 build_requires:
   ExtUtils::MakeMaker: 6.36
-  Test::Base: 0
   Test::More: 0
 configure_requires:
   ExtUtils::MakeMaker: 6.36
@@ -25,4 +24,4 @@ requires:
 resources:
   license: http://dev.perl.org/licenses/
   repository: https://github.com/ugexe/Text--Levenshtein--Damerau.git
-version: 0.19
+version: 0.20
