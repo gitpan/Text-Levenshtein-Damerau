@@ -6,7 +6,7 @@ use List::Util qw/reduce/;
 use Exporter qw/import/;
 
 our @EXPORT_OK = qw/edistance/;
-our $VERSION = '0.24';
+our $VERSION = '0.25';
 
 
 # To XS or not to XS...
@@ -142,7 +142,12 @@ C<Text::Levenshtein::Damerau> - Damerau Levenshtein edit distance.
 
 =head1 DESCRIPTION
 
-Returns the true Damerau Levenshtein edit distance of strings with adjacent transpositions. Defaults to using Pure Perl L<Text::Levenshtein::Damerau::PP>, but has an XS addon L<Text::Levenshtein::Damerau::XS> for massive speed imrovements.
+Returns the true Damerau Levenshtein edit distance of strings with adjacent transpositions. Defaults to using Pure Perl L<Text::Levenshtein::Damerau::PP>, but has an XS addon L<Text::Levenshtein::Damerau::XS> for massive speed imrovements. Works correctly with utf if backend supports it; known to work with L<Text::Levenshtein::Damerau::PP> and L<Text::Levenshtein::Damerau::XS>.
+
+	use utf8;
+	my $tld = Text::Levenshtein::Damerau->new('ⓕⓞⓤⓡ');
+	print $tld->dld('ⓕⓤⓞⓡ');
+	# prints 1
 
 =head1 CONSTRUCTOR
 
@@ -169,14 +174,24 @@ B<Hashref> Argument: Takes a hashref containing:
 
 =item * I<OPTIONAL> max_distance => $int (only return results with a $int distance or less)
 
-=item * I<OPTIONAL> backend => 'Some::Module' Any module that will take 2 arguments and returns an int. See: Text::Levenshtein::Damerau::XS::xs_edistance Text::Levenshtein::Damerau::PP::pp_edistance
+=item * I<OPTIONAL> backend => 'Some::Module' Any module that will take 2 arguments and returns an int. 
+
+	# Override defaults and use Text::Levenshtein::Damerau::PP's pp_edistance()
+	$tld->dld({ list=> \@list, backend => 'Text::Levenshtein::Damerau::PP::pp_edistance');
+
+	# Override defaults and use Text::Levenshtein::Damerau::XS's xs_edistance()
+	use Text::Levenshtein::Damerau;
+	requires Text::Levenshtein::Damerau::XS;
+	...
+	$tld->dld({ list=> \@list, backend => 'Text::Levenshtein::Damerau::XS::xs_edistance');
 
 =back
 
 Returns: hashref with each word from the passed list as keys, and their edit distance (if less than max_distance, which is unlimited by default).
 
 	my $tld = Text::Levenshtein::Damerau->new('Neil');
-	print $tld->dld( 'Niel' ); # prints 1
+	print $tld->dld( 'Niel' );
+	# prints 1
 
 	#or if you want to check the distance of various items in a list
 
@@ -238,9 +253,11 @@ Wrapper function to take the edit distance between a source and target string. I
 
 =over 4
 
-=item * L<https://github.com/ugexe/Text--Levenshtein--Damerau>
+=item * L<https://github.com/ugexe/Text--Levenshtein--Damerau> I<repository>
 
-=item * L<http://en.wikipedia.org/wiki/Damerau%E2%80%93Levenshtein_distance>
+=item * L<http://en.wikipedia.org/wiki/Damerau%E2%80%93Levenshtein_distance> I<damerau levenshtein explaination>
+
+=item * L<Text::Fuzzy> I<regular levenshtein distance>
 
 =back
 
@@ -252,7 +269,7 @@ L<https://rt.cpan.org/Public/Dist/Display.html?Name=Text-Levenshtein-Damerau>
 
 =head1 AUTHOR
 
-ugexe <F<ug@skunkds.com>>
+Nick Logan ugexe <F<ug@skunkds.com>>
 
 =head1 LICENSE AND COPYRIGHT
 

@@ -1,6 +1,4 @@
 Changes
-lib/Text/Levenshtein/Damerau.pm
-lib/Text/Levenshtein/Damerau/PP.pm
 LICENSE
 Makefile.PL
 MANIFEST			This list of files
@@ -18,3 +16,4 @@ t/05_dld_best_distance.t
 t/06_dld_best_match.t
 t/pod.t
 t/pod_coverage.t
+

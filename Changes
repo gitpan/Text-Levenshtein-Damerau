@@ -1,5 +1,8 @@
 Revision history for Perl module Text::Levenshtein::Damerau
 
+0.25 Sat Oct 27 15:58:22 2012
+	- Document updates
+
 0.24 Sat Oct 27 02:40:38 2012
 	- Removed List::Util from ::PP
 	- Fixed dld_best_match so it correctly passed the entire argument hash ref

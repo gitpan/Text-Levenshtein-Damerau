@@ -4,7 +4,7 @@ use utf8;
 use Exporter qw/import/;
 our @EXPORT_OK = qw/pp_edistance/;
 
-our $VERSION = '0.11';
+our $VERSION = '0.12';
 
 sub pp_edistance {
 
@@ -117,7 +117,7 @@ C<Text::Levenshtein::Damerau::PP> - Pure Perl Damerau Levenshtein edit distance
 
 
 	# Using this module directly
-	use Text::Levenshtein::Damerau::PP qw/pp_distance/;
+	use Text::Levenshtein::Damerau::PP qw/pp_edistance/;
 	use warnings;
 	use strict;
 
@@ -126,7 +126,11 @@ C<Text::Levenshtein::Damerau::PP> - Pure Perl Damerau Levenshtein edit distance
 
 =head1 DESCRIPTION
 
-Returns the true Damerau Levenshtein edit distance of strings with adjacent transpositions. Pure Perl implementation.
+Returns the true Damerau Levenshtein edit distance of strings with adjacent transpositions. Pure Perl implementation. Works correctly with utf8.
+
+	use utf8;
+	pp_edistance('ⓕⓞⓤⓡ','ⓕⓞⓤⓡ'), 
+	# prints 1
 
 =head1 METHODS
 
@@ -160,7 +164,7 @@ L<https://rt.cpan.org/Public/Dist/Display.html?Name=Text-Levenshtein-Damerau>
 
 =head1 AUTHOR
 
-ugexe <F<ug@skunkds.com>>
+Nick Logan ugexe <F<ug@skunkds.com>>
 
 =head1 LICENSE AND COPYRIGHT
 
