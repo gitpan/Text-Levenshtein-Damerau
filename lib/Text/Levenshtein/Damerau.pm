@@ -2,11 +2,11 @@ package Text::Levenshtein::Damerau;
 use Text::Levenshtein::Damerau::PP;
 use strict;
 use utf8;
-use List::Util qw/reduce min/;
+use List::Util qw/reduce/;
 use Exporter qw/import/;
 
 our @EXPORT_OK = qw/edistance/;
-our $VERSION = '0.23';
+our $VERSION = '0.24';
 
 
 # To XS or not to XS...
@@ -14,10 +14,11 @@ eval {
 	require Text::Levenshtein::Damerau::XS;
 };
 if(!$@) {
-  *edistance = \&Text::Levenshtein::Damerau::XS::xs_edistance;
+  _set_backend('Text::Levenshtein::Damerau::XS::xs_edistance');
 }
 else {
-  *edistance = \&Text::Levenshtein::Damerau::PP::pp_edistance;
+  # Included in distro
+  _set_backend('Text::Levenshtein::Damerau::PP::pp_edistance');
 }
 
 
@@ -27,10 +28,16 @@ sub new {
     my $self  = {};
 
     $self->{'source'} = shift;
+    
 
     bless( $self, $class );
 
     return $self;
+}
+
+sub _set_backend {
+  my $be = shift;
+  *edistance = \&$be;
 }
 
 sub dld {
@@ -42,6 +49,12 @@ sub dld {
     }
     elsif ( ref $args->{'list'} eq ref [] ) {
         my $target_score;
+
+        if( defined($args->{'backend'}) ) {
+	     _set_backend($args->{'backend'});
+        }
+
+	
         foreach my $target ( @{ $args->{'list'} } ) {
             my $distance = edistance( $self->{'source'}, $target );
 
@@ -81,7 +94,7 @@ sub dld_best_distance {
     my $args = shift;
 
     if ( defined( $args->{'list'} ) ) {
-        my $best_match = $self->dld_best_match( { list => $args->{'list'} } );
+        my $best_match = $self->dld_best_match($args);
         return $self->dld($best_match);
     }
 }
@@ -156,6 +169,8 @@ B<Hashref> Argument: Takes a hashref containing:
 
 =item * I<OPTIONAL> max_distance => $int (only return results with a $int distance or less)
 
+=item * I<OPTIONAL> backend => 'Some::Module' Any module that will take 2 arguments and returns an int. See: Text::Levenshtein::Damerau::XS::xs_edistance Text::Levenshtein::Damerau::PP::pp_edistance
+
 =back
 
 Returns: hashref with each word from the passed list as keys, and their edit distance (if less than max_distance, which is unlimited by default).
@@ -165,7 +180,7 @@ Returns: hashref with each word from the passed list as keys, and their edit dis
 
 	#or if you want to check the distance of various items in a list
 
-	my @names_list = ('Neil','Jack');
+	my @names_list = ('Niel','Jack');
 	my $tld = Text::Levenshtein::Damerau->new('Neil');
 	my $d_ref = $tld->dld({ list=> \@names_list }); # pass a list, returns a hash
 	print $d_ref->{'Niel'}; #prints 1
@@ -179,6 +194,7 @@ Returns: the string with the smallest edit distance between the source and the a
 
 Takes distance of $tld source against every item in @targets, then returns the string of the best match.
 
+	my $tld = Text::Levenshtein::Damerau->new('Neil');
 	my @name_spellings = ('Niel','Neell','KNiel');
 	print $tld->dld_best_match({ list=> \@name_spellings });
 	# prints Niel
@@ -191,6 +207,7 @@ Returns: the smallest edit distance between the source and the array reference o
 
 Takes distance of $tld source against every item in the passed array, then returns the smallest edit distance.
 
+	my $tld = Text::Levenshtein::Damerau->new('Neil');
 	my @name_spellings = ('Niel','Neell','KNiel');
 	print $tld->dld_best_distance({ list => \@name_spellings });
 	# prints 1
