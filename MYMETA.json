@@ -32,6 +32,9 @@
          }
       },
       "runtime" : {
+         "recommends" : {
+            "Text::Levenshtein::Damerau::XS" : 0
+         },
          "requires" : {
             "List::Util" : 0
          }

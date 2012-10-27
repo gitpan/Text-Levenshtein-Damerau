@@ -19,6 +19,8 @@ no_index:
   directory:
     - inc
     - t
+recommends:
+  Text::Levenshtein::Damerau::XS: 0
 requires:
   List::Util: 0
 resources:

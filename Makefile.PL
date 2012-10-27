@@ -11,7 +11,7 @@ auto_license;
 
 test_requires 'Test::More';
 requires 'List::Util';
-reccomends 'Text::Levenshtein::Damerau::XS';
+recommends 'Text::Levenshtein::Damerau::XS';
 
  
 WriteAll();
