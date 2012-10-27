@@ -6,7 +6,7 @@ use List::Util qw/reduce/;
 use Exporter qw/import/;
 
 our @EXPORT_OK = qw/edistance/;
-our $VERSION = '0.25';
+our $VERSION = '0.26';
 
 
 # To XS or not to XS...
@@ -102,6 +102,8 @@ sub dld_best_distance {
 1;
 
 __END__
+
+=encoding utf8
 
 =head1 NAME
 

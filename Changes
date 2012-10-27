@@ -1,5 +1,8 @@
 Revision history for Perl module Text::Levenshtein::Damerau
 
+0.26 Sat Oct 27 18:29:57 2012
+	- Fixed pod utf8 stuff
+
 0.25 Sat Oct 27 15:58:22 2012
 	- Document updates
 

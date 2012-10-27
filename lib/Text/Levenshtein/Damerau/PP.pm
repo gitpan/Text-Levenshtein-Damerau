@@ -4,7 +4,7 @@ use utf8;
 use Exporter qw/import/;
 our @EXPORT_OK = qw/pp_edistance/;
 
-our $VERSION = '0.12';
+our $VERSION = '0.13';
 
 sub pp_edistance {
 
@@ -99,6 +99,8 @@ sub _null_or_empty {
 1;
 
 __END__
+
+=encoding utf8
 
 =head1 NAME
 
