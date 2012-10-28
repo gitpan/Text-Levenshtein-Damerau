@@ -1,7 +1,7 @@
 ---
 abstract: ~
 author:
-  - 'Nick Logan ugexe <F<ug@skunkds.com>>'
+  - 'Nick Logan (ugexe) <F<ug@skunkds.com>>'
 build_requires:
   ExtUtils::MakeMaker: 6.36
   Test::More: 0
