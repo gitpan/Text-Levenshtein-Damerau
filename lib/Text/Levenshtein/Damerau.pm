@@ -6,19 +6,19 @@ use List::Util qw/reduce/;
 use Exporter qw/import/;
 
 our @EXPORT_OK = qw/edistance/;
-our $VERSION = '0.26';
+our $VERSION = '0.27';
 
 
 # To XS or not to XS...
 eval {
 	require Text::Levenshtein::Damerau::XS;
 };
-if(!$@) {
-  _set_backend('Text::Levenshtein::Damerau::XS::xs_edistance');
-}
-else {
+if($@) {
   # Included in distro
   _set_backend('Text::Levenshtein::Damerau::PP::pp_edistance');
+}
+else {
+  _set_backend('Text::Levenshtein::Damerau::XS::xs_edistance');
 }
 
 
@@ -37,7 +37,23 @@ sub new {
 
 sub _set_backend {
   my $be = shift;
-  *edistance = \&$be;
+  my $module = $be;
+  $module =~ s/^(.*)::.*?$/$1/g;
+
+  # Does the module exist?
+  eval "require $module";
+  unless($@) {
+       # Does the module have such a function?
+  	eval "defined &$be";
+	unless($@) {
+		# Does the function return a number if we give it 2 strings?
+		eval "die unless(&$be('four','fuor') =~ /[-+]?[0-9]*\.?[0-9]+/)";
+		unless($@) {
+			# We welcome out new edistance overlord
+	  		*edistance = \&$be;
+		}
+	}
+  }
 }
 
 sub dld {
@@ -144,7 +160,7 @@ C<Text::Levenshtein::Damerau> - Damerau Levenshtein edit distance.
 
 =head1 DESCRIPTION
 
-Returns the true Damerau Levenshtein edit distance of strings with adjacent transpositions. Defaults to using Pure Perl L<Text::Levenshtein::Damerau::PP>, but has an XS addon L<Text::Levenshtein::Damerau::XS> for massive speed imrovements. Works correctly with utf if backend supports it; known to work with L<Text::Levenshtein::Damerau::PP> and L<Text::Levenshtein::Damerau::XS>.
+Returns the true Damerau Levenshtein edit distance of strings with adjacent transpositions. Defaults to using Pure Perl L<Text::Levenshtein::Damerau::PP>, but has an XS addon L<Text::Levenshtein::Damerau::XS> for massive speed imrovements. Works correctly with utf if backend supports it; known to work with C<Text::Levenshtein::Damerau::PP> and C<Text::Levenshtein::Damerau::XS>.
 
 	use utf8;
 	my $tld = Text::Levenshtein::Damerau->new('ⓕⓞⓤⓡ');
@@ -174,9 +190,9 @@ B<Hashref> Argument: Takes a hashref containing:
 
 =item * list => \@array (array ref of strings to compare with)
 
-=item * I<OPTIONAL> max_distance => $int (only return results with a $int distance or less)
+=item * I<OPTIONAL> max_distance => $int (only return results with $int distance or less).
 
-=item * I<OPTIONAL> backend => 'Some::Module' Any module that will take 2 arguments and returns an int. 
+=item * I<OPTIONAL> backend => 'Some::Module::its_function' Any module that will take 2 arguments and returns an int. If the module fails to load, the function doesn't exist, or the function doesn't return a number when passed 2 strings, then C<backend> remains unchanged. 
 
 	# Override defaults and use Text::Levenshtein::Damerau::PP's pp_edistance()
 	$tld->dld({ list=> \@list, backend => 'Text::Levenshtein::Damerau::PP::pp_edistance');
@@ -271,7 +287,7 @@ L<https://rt.cpan.org/Public/Dist/Display.html?Name=Text-Levenshtein-Damerau>
 
 =head1 AUTHOR
 
-Nick Logan ugexe <F<ug@skunkds.com>>
+Nick Logan (ugexe) <F<ug@skunkds.com>>
 
 =head1 LICENSE AND COPYRIGHT
 
