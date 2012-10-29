@@ -6,7 +6,7 @@ use List::Util qw/reduce/;
 use Exporter qw/import/;
 
 our @EXPORT_OK = qw/edistance/;
-our $VERSION = '0.28';
+our $VERSION = '0.29';
 
 
 # To XS or not to XS...

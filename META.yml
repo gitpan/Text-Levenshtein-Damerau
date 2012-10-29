@@ -2,6 +2,7 @@
 abstract: ~
 author:
   - 'Nick Logan (ugexe) <F<ug@skunkds.com>>'
+  - ugexe
 build_requires:
   ExtUtils::MakeMaker: 6.36
   Test::More: 0
@@ -25,5 +26,5 @@ requires:
   List::Util: 0
 resources:
   license: http://dev.perl.org/licenses/
-  repository: https://github.com/ugexe/Text--Levenshtein--Damerau.git
-version: 0.27
+  repository: https://github.com/ugexe/Text--Levenshtein--Damerau
+version: 0.28
