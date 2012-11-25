@@ -1,10 +1,26 @@
 package Text::Levenshtein::Damerau::PP;
 use strict;
 use utf8;
-use Exporter qw/import/;
-our @EXPORT_OK = qw/pp_edistance/;
 
-our $VERSION = '0.17';
+# Fixes old Exporter (in Perl 5.6.2) import error
+BEGIN {
+  require Exporter;
+  *{import} = \&Exporter::import;
+}
+
+our @EXPORT_OK = qw/pp_edistance/;
+our $VERSION = '0.18';
+
+local $@;
+eval { require List::Util; };
+unless ($@) {
+    # Lets cheat if we can (PP kosher?)
+    *min = \&List::Util::min;
+}
+else {
+    *min = \&_min;
+}
+
 
 sub pp_edistance {
 
@@ -12,28 +28,6 @@ sub pp_edistance {
     my ( $source, $target, $max_distance ) = @_;
     $max_distance ||= 0;
     $max_distance = 0 unless ( $max_distance =~ m/^\d+$/xms );
-
-    # Calculates return if $source or $target is undef
-    if ( _null_or_empty($source) ) {
-        if ( length($target) > $max_distance && $max_distance != 0 ) {
-            return -1;
-        }
-        elsif ( _null_or_empty($target) ) {
-            return 0;
-        }
-
-        return length($target);
-    }
-    elsif ( _null_or_empty($target) ) {
-        if ( length($source) > $max_distance && $max_distance != 0 ) {
-            return -1;
-        }
-
-        return length($source);
-    }
-    elsif ( $source eq $target ) {
-        return 0;
-    }
 
     my $m   = length($source);
     my $n   = length($target);
@@ -74,10 +68,10 @@ sub pp_edistance {
             }
             else {
                 $H{ $i + 1 }{ $j + 1 } =
-                  _min( $H{$i}{$j}, $H{ $i + 1 }{$j}, $H{$i}{ $j + 1 } ) + 1;
+                  min( $H{$i}{$j}, $H{ $i + 1 }{$j}, $H{$i}{ $j + 1 } ) + 1;
             }
 
-            $H{ $i + 1 }{ $j + 1 } = _min( $H{ $i + 1 }{ $j + 1 },
+            $H{ $i + 1 }{ $j + 1 } = min( $H{ $i + 1 }{ $j + 1 },
                 $H{$i1}{$j1} + ( $i - $i1 - 1 ) + 1 + ( $j - $j1 - 1 ) );
         }
 
@@ -139,8 +133,6 @@ Returns the true Damerau Levenshtein edit distance of strings with adjacent tran
 	# prints 1
 
 =head1 METHODS
-
-=head1 EXPORTABLE METHODS
 
 =head2 pp_edistance
 

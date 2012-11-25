@@ -3,7 +3,7 @@ abstract: 'Damerau Levenshtein edit distance.'
 author:
   - 'Nick Logan <ug@skunkds.org>'
 build_requires:
-  ExtUtils::MakeMaker: 0
+  Test::More: 0
 configure_requires:
   ExtUtils::MakeMaker: 0
 dynamic_config: 1
@@ -17,8 +17,9 @@ no_index:
   directory:
     - t
     - inc
-requires: {}
+requires:
+  List::Util: 0
 resources:
   bugtracker: https://rt.cpan.org/Public/Dist/Display.html?Name=Text-Levenshtein-Damerau
   repository: https://github.com/ugexe/Text--Levenshtein--Damerau
-version: 0.31
+version: 0.32

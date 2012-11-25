@@ -13,6 +13,10 @@ WriteMakefile (
     AUTHOR => 'Nick Logan <ug@skunkds.org>',
     LICENSE => 'perl',
     PREREQ_PM => {
+	'List::Util'		=> 0,
+    },
+    BUILD_REQUIRES => {
+	'Test::More'		=> 0,
     },
     META_MERGE => {
         resources => {

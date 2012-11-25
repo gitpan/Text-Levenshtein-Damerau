@@ -22,7 +22,7 @@
    "prereqs" : {
       "build" : {
          "requires" : {
-            "ExtUtils::MakeMaker" : 0
+            "Test::More" : 0
          }
       },
       "configure" : {
@@ -31,7 +31,9 @@
          }
       },
       "runtime" : {
-         "requires" : {}
+         "requires" : {
+            "List::Util" : 0
+         }
       }
    },
    "release_status" : "stable",
@@ -43,5 +45,5 @@
          "url" : "https://github.com/ugexe/Text--Levenshtein--Damerau"
       }
    },
-   "version" : "0.31"
+   "version" : "0.32"
 }
