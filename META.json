@@ -32,7 +32,8 @@
       },
       "runtime" : {
          "requires" : {
-            "List::Util" : 0
+            "List::Util" : 0,
+            "perl" : "5.008008"
          }
       }
    },
@@ -45,5 +46,5 @@
          "url" : "https://github.com/ugexe/Text--Levenshtein--Damerau"
       }
    },
-   "version" : "0.35"
+   "version" : "0.36"
 }
