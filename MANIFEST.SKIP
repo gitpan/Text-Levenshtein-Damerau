@@ -7,5 +7,8 @@ pm_to_blib
 .tar.gz$
 .zip$
 ^Makefile$
-MYMETA.json
-MYMETA.yml
+MYMETA.*
+XS.c$
+.o$
+.bs$
+.SKIP$
