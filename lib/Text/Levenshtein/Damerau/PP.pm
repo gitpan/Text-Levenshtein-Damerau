@@ -1,15 +1,15 @@
 package Text::Levenshtein::Damerau::PP;
-use 5.008_008; # for utf8, sorry legacy Perls
+use 5.008_008;    # for utf8, sorry legacy Perls
 use strict;
 use utf8;
 
 BEGIN {
-  require Exporter;
-  *{import} = \&Exporter::import;
+    require Exporter;
+    *{import} = \&Exporter::import;
 }
 
 our @EXPORT_OK = qw/pp_edistance/;
-our $VERSION = '0.20';
+our $VERSION   = '0.22';
 
 local $@;
 eval { require List::Util; };
@@ -20,99 +20,84 @@ else {
     *min = \&_min;
 }
 
-
 sub pp_edistance {
-
     # Does the actual calculation on a pair of strings
     my ( $source, $target, $max_distance ) = @_;
-    $max_distance ||= 0;
-    $max_distance = 0 unless ( $max_distance =~ m/^\d+$/xms );
+    $max_distance = int($max_distance || 0);
 
-    my $m   = length($source);
-    my $n   = length($target);
- 
-    if($m == 0 && $n == 0) {
-	return 0;
-    }
-    elsif($m == 0) {
-	return $n;
-    }
-    elsif($n == 0) {
-       return $m;
-    }
+    my $source_length = length($source) || 0;
+    my $target_length = length($target) || 0;
+    return ($source_length?$source_length:$target_length) if(!$target_length || !$source_length);
 
-    my $INF = $m + $n;
-    my %H;
-    my %sd;
+    my $lengths_max = $source_length + $target_length;
+    my $dictionary_count;    #create dictionary to keep character count
+    my $swap_count;          
+    my $swap_score;          
+    my $target_char_count;   
+    my $source_index;
+    my $target_index;
+    my @scores;              
 
-    $H{0}{0} = $INF;
-    $H{1}{1} = 0;
-    $H{1}{0} = $INF;
-    $H{0}{1} = $INF;
+    # init values outside of work loops
+    $scores[0][0] = $scores[1][0] = $scores[0][1] = $lengths_max;
+    $scores[1][1] = 0;
 
+    # Work Loops
+    foreach $source_index ( 1 .. $source_length ) {
+        $swap_count = 0;
+        $dictionary_count->{ substr( $source, $source_index - 1, 1 ) } = 0;
+        $scores[ $source_index + 1 ][1] = $source_index;
+        $scores[ $source_index + 1 ][0] = $lengths_max;
 
-    for ( 1 .. $m ) {
-        my $i  = $_;
-        my $DB = 0;
+        foreach $target_index ( 1 .. $target_length ) {
+            if ( $source_index == 1 ) {
+                $dictionary_count->{ substr( $target, $target_index - 1, 1 ) } = 0;
+                $scores[1][ $target_index + 1 ] = $target_index;
+                $scores[0][ $target_index + 1 ] = $lengths_max;
+            }
 
-        $sd{substr( $source, $i - 1, 1 )} = 0;
-        $H{ $i + 1 }{1} = $i;
-        $H{ $i + 1 }{0} = $INF;
+            $target_char_count =
+              $dictionary_count->{ substr( $target, $target_index - 1, 1 ) };
+	     $swap_score = $scores[$target_char_count][$swap_count] +
+                  ( $source_index - $target_char_count - 1 ) + 1 +
+                  ( $target_index - $swap_count - 1 );
 
-        for ( 1 .. $n ) {
-            my $j  = $_;
-	      
-            if( $i == 1 ) {
-                $sd{substr( $target, $j - 1, 1 )} = 0;
-	         $H{1}{ $j + 1 } = $j;
-       	  $H{0}{ $j + 1 } = $INF;
-	     }
-
-            my $i1 = $sd{ substr( $target, $j - 1, 1 ) };
-            my $j1 = $DB;
-
-            if ( substr( $source, $i - 1, 1 ) eq substr( $target, $j - 1, 1 ) )
+            if (
+                substr( $source, $source_index - 1, 1 ) ne
+                substr( $target, $target_index - 1, 1 ) )
             {
-                $H{ $i + 1 }{ $j + 1 } = $H{$i}{$j};
-                $DB = $j;
+                $scores[ $source_index + 1 ][ $target_index + 1 ] = min(
+                    $scores[$source_index][$target_index]+1,
+                    $scores[ $source_index + 1 ][$target_index]+1,
+                    $scores[$source_index][ $target_index + 1 ]+1,
+                    $swap_score
+                );
             }
             else {
-                $H{ $i + 1 }{ $j + 1 } =
-                  min( $H{$i}{$j}, $H{ $i + 1 }{$j}, $H{$i}{ $j + 1 } ) + 1;
-            }
+                $swap_count = $target_index;
 
-            $H{ $i + 1 }{ $j + 1 } = min( $H{ $i + 1 }{ $j + 1 },
-                $H{$i1}{$j1} + ( $i - $i1 - 1 ) + 1 + ( $j - $j1 - 1 ) );
+                $scores[ $source_index + 1 ][ $target_index + 1 ] = min(
+                  $scores[$source_index][$target_index], $swap_score
+                );
+            }
         }
 
-        unless ( $max_distance == 0 || $max_distance >= $H{ $i + 1 }{ $n + 1 } )
+        unless ( $max_distance == 0 || $max_distance >= $scores[ $source_index + 1 ][ $target_length + 1 ] )
         {
             return -1;
         }
 
-        $sd{ substr( $source, $i - 1, 1 ) } = $i;
+        $dictionary_count->{ substr( $source, $source_index - 1, 1 ) } =
+          $source_index;
     }
 
-    return $H{ $m + 1 }{ $n + 1 };
+    return $scores[ $source_length + 1 ][ $target_length + 1 ];
 }
-
+ 
 sub _min {
-    my $min = shift;
-    return $min if not @_;
-
-    my $next = shift;
-    unshift @_, $min < $next ? $min : $next;
+    return $_[0] if not @_;
+    unshift @_, $_[0] < $_[1] ? $_[0] : $_[1];
     goto &_min;
-}
-
-sub _null_or_empty {
-    my $s = shift;
-
-    if ( defined($s) && $s ne '' ) {
-        return 0;
-    }
-
-    return 1;
 }
 
 1;
