@@ -1,10 +1,10 @@
 {
    "abstract" : "Damerau Levenshtein edit distance.",
    "author" : [
-      "Nick Logan <ug@skunkds.org>"
+      "Nick Logan <ugexe@cpan.org>"
    ],
    "dynamic_config" : 1,
-   "generated_by" : "ExtUtils::MakeMaker version 6.62, CPAN::Meta::Converter version 2.112150",
+   "generated_by" : "ExtUtils::MakeMaker version 6.64, CPAN::Meta::Converter version 2.120921",
    "license" : [
       "perl_5"
    ],
@@ -22,19 +22,29 @@
    "prereqs" : {
       "build" : {
          "requires" : {
-            "Test::More" : 0
+            "Test::More" : "0"
          }
       },
       "configure" : {
          "requires" : {
-            "ExtUtils::MakeMaker" : 0
+            "ExtUtils::MakeMaker" : "0"
          }
       },
       "runtime" : {
          "requires" : {
-            "List::Util" : 0,
+            "List::Util" : "0",
             "perl" : "5.008008"
          }
+      }
+   },
+   "provides" : {
+      "Text::Levenshtein::Damerau" : {
+         "file" : "lib/Text/Levenshtein/Damerau.pm",
+         "version" : "0.40"
+      },
+      "Text::Levenshtein::Damerau::PP" : {
+         "file" : "lib/Text/Levenshtein/Damerau/PP.pm",
+         "version" : "0.24"
       }
    },
    "release_status" : "stable",
@@ -46,5 +56,5 @@
          "url" : "https://github.com/ugexe/Text--Levenshtein--Damerau"
       }
    },
-   "version" : "0.38"
+   "version" : "0.40"
 }
